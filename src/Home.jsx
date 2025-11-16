@@ -181,6 +181,7 @@ const HeaderRow = styled.div`
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
+    display: flex;
   }
 `;
 
@@ -564,7 +565,7 @@ export default function PracticeDashboard({ isDark = false }) {
           <SectionTitle>PRACTICE DAYS</SectionTitle>
           <div
             style={{
-              display: "none",
+              display: "flex",
               alignItems: "center",
               gap: "10px",
               height: "100%",

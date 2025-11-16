@@ -2,7 +2,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../public/logog.png";
 import icon from "../public/seticon.png";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BiLogOut } from "react-icons/bi";
 
 const Nav = styled.nav`
@@ -81,6 +81,37 @@ function Navbar({ dark, setDark }) {
   const location = useLocation();
   const isLoginPage = location.pathname === "/";
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const avatarRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if click is outside both dropdown and avatar
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        avatarRef.current &&
+        !avatarRef.current.contains(event.target)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    // Add event listener when dropdown is open
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
+
+  const handleAvatarClick = () => {
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -91,7 +122,11 @@ function Navbar({ dark, setDark }) {
         <Right>
           {/* MOBILE AVATAR BUTTON */}
           {!isLoginPage && (
-            <Avatar style={{ marginLeft: 40 }} onClick={() => setOpen(!open)}>
+            <Avatar
+              ref={avatarRef}
+              style={{ marginLeft: 40 }}
+              onClick={handleAvatarClick}
+            >
               A
             </Avatar>
           )}
@@ -101,7 +136,7 @@ function Navbar({ dark, setDark }) {
       </Nav>
 
       {/* MOBILE POPUP DROPDOWN MENU */}
-      <Dropdown open={open}>
+      <Dropdown ref={dropdownRef} open={open}>
         <DropDiv>
           <Avatar style={{ width: 35, height: 35, fontSize: 16 }}>A</Avatar>
           <span style={{ fontWeight: "600", fontSize: "18px" }}>Admin</span>
