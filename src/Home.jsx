@@ -564,7 +564,7 @@ export default function PracticeDashboard({ isDark = false }) {
           <SectionTitle>PRACTICE DAYS</SectionTitle>
           <div
             style={{
-              display: "flex",
+              display: "none",
               alignItems: "center",
               gap: "10px",
               height: "100%",
